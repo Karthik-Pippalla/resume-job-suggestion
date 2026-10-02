@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jobs that fit your resume</title>
+  <style>
+    :root {
+      --paper: #f3efe6;
+      --card: #fffdf8;
+      --ink: #1c1915;
+      --muted: #5c564c;
+      --line: #e2d9cc;
+      --green: #0c6b52;
+      --green-soft: #e5f4ee;
+      --warn: #8a4b12;
+      --warn-soft: #f8efe4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(760px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0 72px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-family: Georgia, "Iowan Old Style", serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .lede {
+      margin: 0 0 28px;
+      max-width: 38rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    form {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .drop {
+      display: grid;
+      gap: 4px;
+      place-items: center;
+      min-height: 148px;
+      border: 1.5px dashed #c9bfb0;
+      border-radius: 12px;
+      background: #faf7f1;
+      text-align: center;
+      cursor: pointer;
+      padding: 24px;
+    }
+
+    .drop:focus-within,
+    .drop.drag {
+      border-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .drop strong { font-size: 1.05rem; }
+    .drop span { color: var(--muted); font-size: 0.95rem; }
+
+    input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .key {
+      display: grid;
+      gap: 6px;
+      margin-top: 16px;
+      font-weight: 600;
+    }
+
+    .key span {
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .key input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #faf7f1;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 400;
+      padding: 12px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      background: var(--green);
+      color: white;
+      font: inherit;
+      font-weight: 600;
+      padding: 12px 18px;
+      cursor: pointer;
+    }
+
+    button:disabled { opacity: 0.55; cursor: wait; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+    .status {
+      min-height: 1.5rem;
+      margin: 16px 0 0;
+      color: var(--warn);
+    }
+
+    .summary {
+      margin: 28px 0 12px;
+    }
+
+    .summary h2 {
+      margin: 0 0 6px;
+      font-family: Georgia, "Iowan Old Style", serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+    }
+
+    .summary p { margin: 0; color: var(--muted); }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.9rem;
+    }
+
+    .job {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      margin-top: 12px;
+    }
+
+    .job header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .job h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .company { margin: 2px 0 0; color: var(--muted); }
+
+    .badge {
+      flex: none;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .badge.stretch {
+      background: var(--warn-soft);
+      color: var(--warn);
+    }
+
+    .meta {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .job p { margin: 10px 0 0; }
+
+    footer {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer a { color: var(--green); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Jobs that fit your resume</h1>
+    <p class="lede">Upload your resume. We’ll suggest roles based on the skills you list and how long you’ve been working.</p>
+
+    <form id="finder">
+      <label class="drop" id="drop" for="resume">
+        <strong>Choose a resume</strong>
+        <span id="file-label">PDF, Word, or a plain text file</span>
+        <input id="resume" name="file" type="file" accept=".pdf,.docx,.txt,application/pdf" required>
+      </label>
+      <label class="key" for="api-key">
+        OpenAI API key
+        <span>Optional. Add a key for a closer read of your skills and years of work. It is used for this search only and is not saved.</span>
+        <input id="api-key" name="openai_api_key" type="password" autocomplete="off" spellcheck="false" placeholder="Paste a key if you have one">
+      </label>
+      <div class="actions">
+        <button id="submit" type="submit">See suggestions</button>
+      </div>
+    </form>
+
+    <p class="status" id="status" role="status"></p>
+    <section id="results" hidden></section>
+
+    <footer>
+      Your file is read once and not saved.
+      <a href="/docs">Technical API</a>
+    </footer>
+  </main>
+
+  <script>
+    const form = document.querySelector("#finder");
+    const input = document.querySelector("#resume");
+    const fileLabel = document.querySelector("#file-label");
+    const drop = document.querySelector("#drop");
+    const status = document.querySelector("#status");
+    const results = document.querySelector("#results");
+    const submit = document.querySelector("#submit");
+    const apiKey = document.querySelector("#api-key");
+
+    const skillNames = {
+      python: "Python", fastapi: "FastAPI", sql: "SQL", docker: "Docker",
+      postgresql: "PostgreSQL", django: "Django", aws: "AWS", redis: "Redis",
+      react: "React", css: "CSS", javascript: "JavaScript", typescript: "TypeScript",
+      html: "HTML", "next.js": "Next.js", graphql: "GraphQL", spark: "Spark",
+      airflow: "Airflow", excel: "Excel", tableau: "Tableau", "power bi": "Power BI",
+      "machine learning": "machine learning", pytorch: "PyTorch", kubernetes: "Kubernetes",
+      linux: "Linux", "ci/cd": "CI/CD", "node.js": "Node.js", java: "Java",
+      spring: "Spring", kafka: "Kafka", pytest: "pytest", figma: "Figma",
+      git: "Git", flask: "Flask", mongodb: "MongoDB", rest: "REST",
+      vue: "Vue", angular: "Angular", "scikit-learn": "scikit-learn",
+      pandas: "Pandas", terraform: "Terraform", tensorflow: "TensorFlow"
+    };
+
+    input.addEventListener("change", () => {
+      fileLabel.textContent = input.files[0] ? input.files[0].name : "PDF, Word, or a plain text file";
+    });
+
+    ["dragover", "dragenter"].forEach((name) => {
+      drop.addEventListener(name, (event) => {
+        event.preventDefault();
+        drop.classList.add("drag");
+      });
+    });
+    ["dragleave", "drop"].forEach((name) => {
+      drop.addEventListener(name, (event) => {
+        event.preventDefault();
+        drop.classList.remove("drag");
+      });
+    });
+    drop.addEventListener("drop", (event) => {
+      if (event.dataTransfer.files.length) {
+        input.files = event.dataTransfer.files;
+        fileLabel.textContent = input.files[0].name;
+      }
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!input.files[0]) return;
+      const key = apiKey.value.trim();
+      submit.disabled = true;
+      status.textContent = key ? "Reading your resume more carefully…" : "Reading your resume…";
+      results.hidden = true;
+      try {
+        const body = new FormData();
+        body.append("file", input.files[0]);
+        if (key) body.append("openai_api_key", key);
+        const response = await fetch("/api/v1/recommendations?top_k=5", { method: "POST", body });
+        const payload = await response.json();
+        if (!response.ok) {
+          status.textContent = payload.detail || "That file could not be read. Try a PDF, Word, or text resume.";
+          return;
+        }
+        status.textContent = "";
+        results.hidden = false;
+        results.innerHTML = renderResults(payload);
+      } catch {
+        status.textContent = "The suggestions could not be loaded. Check that the site is still running.";
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    function renderResults(payload) {
+      const years = experienceLine(payload.resume_years);
+      const skills = payload.extracted_skills.map(skillLabel).map(escapeHtml);
+      const chips = skills.length
+        ? `<div class="chips">${skills.map((skill) => `<span class="chip">${skill}</span>`).join("")}</div>`
+        : "";
+      const jobs = payload.recommendations.map(renderJob).join("");
+      const empty = jobs ? "" : "<p>No roles matched those filters.</p>";
+      return `
+        <div class="summary">
+          <h2>Suggested roles</h2>
+          <p>${escapeHtml(years)}</p>
+          ${chips}
+        </div>
+        ${jobs || empty}
+      `;
+    }
+
+    function renderJob(item) {
+      const job = item.job;
+      const fit = matchLabel(item.score);
+      const level = levelLabel(job.seniority);
+      return `
+        <article class="job">
+          <header>
+            <div>
+              <h3>${escapeHtml(job.title)}</h3>
+              <p class="company">${escapeHtml(job.company)}</p>
+            </div>
+            <span class="badge ${fit.stretch ? "stretch" : ""}">${fit.label}</span>
+          </header>
+          <p class="meta">${escapeHtml(job.location)} · ${escapeHtml(level)}</p>
+          <p>${escapeHtml(skillSentence(item))}</p>
+          <p>${escapeHtml(yearsSentence(item))}</p>
+          <p>${escapeHtml(job.description)}</p>
+        </article>
+      `;
+    }
+
+    function skillLabel(skill) {
+      return skillNames[skill] || skill.charAt(0).toUpperCase() + skill.slice(1);
+    }
+
+    function listWords(skills) {
+      const names = skills.map(skillLabel);
+      if (names.length === 0) return "";
+      if (names.length === 1) return names[0];
+      return `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
+    }
+
+    function skillSentence(item) {
+      const have = listWords(item.matched_skills);
+      const missing = listWords(item.missing_skills);
+      if (have && missing) return `You already use ${have}. This role also asks for ${missing}.`;
+      if (have) return `You already use ${have}.`;
+      if (missing) return `This role asks for ${missing}, which did not show up on the resume.`;
+      return "This suggestion is based on how the resume is written, not a specific skill list.";
+    }
+
+    function yearsSentence(item) {
+      const job = item.job;
+      const asked = askedFor(job.min_years, job.max_years);
+      if (item.experience_fit === 1) return `Your experience fits a role that asks for ${asked}.`;
+      if (item.experience_fit === 0.5) return `This role asks for ${asked}. Years of work were not clear on the resume, so this is only a rough fit.`;
+      return `This role asks for ${asked}, so the experience match is only partial.`;
+    }
+
+    function askedFor(minYears, maxYears) {
+      if (maxYears == null) return `at least ${yearsText(minYears)}`;
+      if (minYears <= 0) return `up to ${yearsText(maxYears)}`;
+      return `${trimNumber(minYears)} to ${yearsText(maxYears)}`;
+    }
+
+    function experienceLine(years) {
+      if (years == null) return "Years of work were not clear, so these suggestions lean on your skills.";
+      return `About ${yearsText(years)} of work show up on the resume.`;
+    }
+
+    function yearsText(years) {
+      const value = trimNumber(years);
+      return value === "1" ? "1 year" : `${value} years`;
+    }
+
+    function trimNumber(value) {
+      return String(Math.round(value * 10) / 10);
+    }
+
+    function levelLabel(seniority) {
+      if (seniority === "junior") return "Junior";
+      if (seniority === "senior") return "Senior";
+      return "Mid-level";
+    }
+
+    function matchLabel(score) {
+      if (score >= 0.75) return { label: "Strong fit", stretch: false };
+      if (score >= 0.6) return { label: "Good fit", stretch: false };
+      if (score >= 0.45) return { label: "Possible fit", stretch: false };
+      return { label: "Stretch", stretch: true };
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+  </script>
+</body>
+</html>
