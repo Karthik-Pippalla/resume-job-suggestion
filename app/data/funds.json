@@ -1,0 +1,122 @@
+[
+  {
+    "id": "fund-ai",
+    "name": "Harbor AI Fund",
+    "ticker": "HAIF",
+    "sector": "Artificial intelligence",
+    "risk": "more ups and downs",
+    "focus_skills": ["python", "machine learning", "scikit-learn"],
+    "related_skills": ["pandas", "pytorch", "tensorflow"],
+    "description": "Holds companies that build machine learning products. The fund follows Python model work, scikit-learn style classical models, and teams that train predictive systems."
+  },
+  {
+    "id": "fund-technology",
+    "name": "Northwind Technology Fund",
+    "ticker": "NTWF",
+    "sector": "Technology",
+    "risk": "more ups and downs",
+    "focus_skills": ["python", "javascript", "aws"],
+    "related_skills": ["docker", "sql"],
+    "description": "Holds technology companies that sell software and cloud tools. The fund follows programming teams, AWS platforms, and product engineering."
+  },
+  {
+    "id": "fund-software",
+    "name": "Lumen Software Fund",
+    "ticker": "LMSF",
+    "sector": "Software",
+    "risk": "mixed",
+    "focus_skills": ["react", "css"],
+    "related_skills": ["javascript", "typescript", "html"],
+    "description": "Holds software companies that ship product interfaces. The fund follows React applications, CSS layout, and teams that design web screens."
+  },
+  {
+    "id": "fund-healthcare",
+    "name": "Fieldnote Healthcare Fund",
+    "ticker": "FNHC",
+    "sector": "Healthcare",
+    "risk": "mixed",
+    "focus_skills": ["healthcare", "nlp"],
+    "related_skills": ["python", "machine learning"],
+    "description": "Holds healthcare companies and clinical research firms. The fund follows patient data, healthcare language tools, and NLP work on medical notes."
+  },
+  {
+    "id": "fund-data",
+    "name": "Cedar Data Fund",
+    "ticker": "CDRD",
+    "sector": "Data",
+    "risk": "mixed",
+    "focus_skills": ["sql", "python", "spark"],
+    "related_skills": ["pandas", "airflow"],
+    "description": "Holds companies that run data platforms. The fund follows SQL warehouses, Python pipelines, and Spark processing for large tables."
+  },
+  {
+    "id": "fund-cloud",
+    "name": "Northwind Cloud Fund",
+    "ticker": "NWCL",
+    "sector": "Cloud",
+    "risk": "more ups and downs",
+    "focus_skills": ["aws", "docker", "kubernetes"],
+    "related_skills": ["terraform", "linux"],
+    "description": "Holds cloud and infrastructure companies. The fund follows AWS hosting, Docker packaging, and Kubernetes operations."
+  },
+  {
+    "id": "fund-energy",
+    "name": "Harbor Energy Fund",
+    "ticker": "HBEN",
+    "sector": "Energy",
+    "risk": "more ups and downs",
+    "focus_skills": ["excel"],
+    "related_skills": ["tableau"],
+    "description": "Holds companies that produce oil, gas, and electric power. The fund follows energy prices and utility demand, not software or research labs."
+  },
+  {
+    "id": "fund-broad",
+    "name": "Sample Broad Market Fund",
+    "ticker": "SBMF",
+    "sector": "Broad market",
+    "risk": "steadier",
+    "focus_skills": [],
+    "related_skills": [],
+    "description": "Holds a wide mix of public companies across many industries. It does not lean on one field."
+  },
+  {
+    "id": "fund-consumer",
+    "name": "Lumen Consumer Fund",
+    "ticker": "LMCS",
+    "sector": "Consumer",
+    "risk": "steadier",
+    "focus_skills": ["figma"],
+    "related_skills": ["css", "html"],
+    "description": "Holds shops, brands, and consumer apps. The fund follows retail demand and design work in Figma, not model training."
+  },
+  {
+    "id": "fund-finance",
+    "name": "Cedar Finance Fund",
+    "ticker": "CDFN",
+    "sector": "Financials",
+    "risk": "mixed",
+    "focus_skills": ["sql", "excel"],
+    "related_skills": ["python", "tableau"],
+    "description": "Holds banks, insurers, and payment firms. The fund follows lending, markets, and spreadsheet reporting."
+  },
+  {
+    "id": "fund-security",
+    "name": "Harbor Security Fund",
+    "ticker": "HBSC",
+    "sector": "Cybersecurity",
+    "risk": "more ups and downs",
+    "focus_skills": ["linux", "python", "aws"],
+    "related_skills": ["docker", "kubernetes"],
+    "description": "Holds cybersecurity companies. The fund follows Linux hardening, cloud protection, and security software."
+  },
+  {
+    "id": "fund-analytics",
+    "name": "Fieldnote Analytics Fund",
+    "ticker": "FNAN",
+    "sector": "Data",
+    "risk": "mixed",
+    "focus_skills": ["pandas", "sql", "tableau"],
+    "related_skills": ["python", "excel"],
+    "description": "Holds companies that sell reporting and analytics tools. The fund follows Pandas tables, SQL metrics, and Tableau dashboards."
+  }
+]

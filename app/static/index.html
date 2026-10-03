@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jobs that fit your resume</title>
+  <title>Investments that fit your resume</title>
   <style>
     :root {
       --paper: #f3efe6;
@@ -219,8 +219,8 @@
 </head>
 <body>
   <main>
-    <h1>Jobs that fit your resume</h1>
-    <p class="lede">Upload your resume. We’ll suggest roles based on the skills you list and how long you’ve been working.</p>
+    <h1>Investments that fit your resume</h1>
+    <p class="lede">Upload your resume. We’ll suggest sample funds based on the skills and field in your background.</p>
 
     <form id="finder">
       <label class="drop" id="drop" for="resume">
@@ -242,6 +242,7 @@
     <section id="results" hidden></section>
 
     <footer>
+      These are sample funds for a demo, not financial advice and not a suggestion to buy.
       Your file is read once and not saved.
       <a href="/docs">Technical API</a>
     </footer>
@@ -263,6 +264,7 @@
       react: "React", css: "CSS", javascript: "JavaScript", typescript: "TypeScript",
       html: "HTML", "next.js": "Next.js", graphql: "GraphQL", spark: "Spark",
       airflow: "Airflow", excel: "Excel", tableau: "Tableau", "power bi": "Power BI",
+      healthcare: "healthcare", nlp: "NLP",
       "machine learning": "machine learning", pytorch: "PyTorch", kubernetes: "Kubernetes",
       linux: "Linux", "ci/cd": "CI/CD", "node.js": "Node.js", java: "Java",
       spring: "Spring", kafka: "Kafka", pytest: "pytest", figma: "Figma",
@@ -327,35 +329,33 @@
       const chips = skills.length
         ? `<div class="chips">${skills.map((skill) => `<span class="chip">${skill}</span>`).join("")}</div>`
         : "";
-      const jobs = payload.recommendations.map(renderJob).join("");
-      const empty = jobs ? "" : "<p>No roles matched those filters.</p>";
+      const funds = payload.recommendations.map(renderFund).join("");
+      const empty = funds ? "" : "<p>No sample funds matched that resume.</p>";
       return `
         <div class="summary">
-          <h2>Suggested roles</h2>
+          <h2>Sample funds</h2>
           <p>${escapeHtml(years)}</p>
           ${chips}
         </div>
-        ${jobs || empty}
+        ${funds || empty}
       `;
     }
 
-    function renderJob(item) {
-      const job = item.job;
+    function renderFund(item) {
+      const fund = item.fund;
       const fit = matchLabel(item.score);
-      const level = levelLabel(job.seniority);
       return `
         <article class="job">
           <header>
             <div>
-              <h3>${escapeHtml(job.title)}</h3>
-              <p class="company">${escapeHtml(job.company)}</p>
+              <h3>${escapeHtml(fund.name)}</h3>
+              <p class="company">${escapeHtml(fund.ticker)} · ${escapeHtml(fund.sector)}</p>
             </div>
             <span class="badge ${fit.stretch ? "stretch" : ""}">${fit.label}</span>
           </header>
-          <p class="meta">${escapeHtml(job.location)} · ${escapeHtml(level)}</p>
+          <p class="meta">Tends to have ${escapeHtml(fund.risk)}</p>
           <p>${escapeHtml(skillSentence(item))}</p>
-          <p>${escapeHtml(yearsSentence(item))}</p>
-          <p>${escapeHtml(job.description)}</p>
+          <p>${escapeHtml(fund.description)}</p>
         </article>
       `;
     }
@@ -374,29 +374,18 @@
     function skillSentence(item) {
       const have = listWords(item.matched_skills);
       const missing = listWords(item.missing_skills);
-      if (have && missing) return `You already use ${have}. This role also asks for ${missing}.`;
-      if (have) return `You already use ${have}.`;
-      if (missing) return `This role asks for ${missing}, which did not show up on the resume.`;
+      const lined = item.matched_skills.length === 1 ? "lines up" : "line up";
+      if (have && missing) {
+        return `Your resume mentions ${have}, which ${lined} with this fund. It also focuses on ${missing}, which did not show up.`;
+      }
+      if (have) return `Your resume mentions ${have}, which ${lined} with this fund.`;
+      if (missing) return `This fund focuses on ${missing}, which did not show up on the resume.`;
       return "This suggestion is based on how the resume is written, not a specific skill list.";
     }
 
-    function yearsSentence(item) {
-      const job = item.job;
-      const asked = askedFor(job.min_years, job.max_years);
-      if (item.experience_fit === 1) return `Your experience fits a role that asks for ${asked}.`;
-      if (item.experience_fit === 0.5) return `This role asks for ${asked}. Years of work were not clear on the resume, so this is only a rough fit.`;
-      return `This role asks for ${asked}, so the experience match is only partial.`;
-    }
-
-    function askedFor(minYears, maxYears) {
-      if (maxYears == null) return `at least ${yearsText(minYears)}`;
-      if (minYears <= 0) return `up to ${yearsText(maxYears)}`;
-      return `${trimNumber(minYears)} to ${yearsText(maxYears)}`;
-    }
-
     function experienceLine(years) {
-      if (years == null) return "Years of work were not clear, so these suggestions lean on your skills.";
-      return `About ${yearsText(years)} of work show up on the resume.`;
+      if (years == null) return "Years of work were not clear. The funds below follow your skills, not your seniority.";
+      return `About ${yearsText(years)} of work show up on the resume. The funds below follow your field, not those years.`;
     }
 
     function yearsText(years) {
@@ -406,12 +395,6 @@
 
     function trimNumber(value) {
       return String(Math.round(value * 10) / 10);
-    }
-
-    function levelLabel(seniority) {
-      if (seniority === "junior") return "Junior";
-      if (seniority === "senior") return "Senior";
-      return "Mid-level";
     }
 
     function matchLabel(score) {

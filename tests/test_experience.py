@@ -38,6 +38,11 @@ def test_explicit_claim_and_dates_are_not_added():
     assert extract_years(text, today=date(2026, 10, 2)) == 8
 
 
+def test_wrapped_job_dates_still_count():
+    text = "Experience\nMasTec India\nJan 2023 -\nAug 2024"
+    assert extract_years(text, today=date(2026, 10, 2)) == 1.7
+
+
 def test_no_experience_signal_returns_none():
     assert extract_years("Python FastAPI SQL Docker") is None
 

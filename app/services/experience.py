@@ -67,8 +67,8 @@ def extract_years(text: str, today: date | None = None) -> float | None:
     """
     today = today or date.today()
     sections = _sections(text)
-    claim_text = _claim_text(text, sections)
-    date_text = sections.get("experience", text)
+    claim_text = _unwrap(_claim_text(text, sections))
+    date_text = _unwrap(sections.get("experience", text))
     explicit = [
         float(match)
         for match in _EXPLICIT_YEARS.findall(claim_text)
@@ -100,13 +100,33 @@ def _sections(text: str) -> dict[str, str]:
     current = "preamble"
     buckets: dict[str, list[str]] = {current: []}
     for line in text.splitlines():
-        heading = _HEADINGS.get(line.strip().lower().rstrip(":"))
-        if heading:
-            current = heading
-            buckets.setdefault(current, [])
+        heading = _heading(line)
+        if heading is None:
+            buckets.setdefault(current, []).append(line)
             continue
-        buckets.setdefault(current, []).append(line)
+        name, remainder = heading
+        current = name
+        buckets.setdefault(current, [])
+        if remainder:
+            buckets[current].append(remainder)
     return {name: "\n".join(lines) for name, lines in buckets.items() if lines}
+
+
+def _heading(line: str) -> tuple[str, str] | None:
+    original = line.strip()
+    cleaned = re.sub(r"[^a-z ]+", "", original.lower()).strip()
+    for name in sorted(_HEADINGS, key=len, reverse=True):
+        if cleaned != name and not cleaned.startswith(name + " "):
+            continue
+        match = re.match(rf"(?i){re.escape(name)}\b[:\s\-–—]*", original)
+        if match is None:
+            continue
+        return _HEADINGS[name], original[match.end():].strip()
+    return None
+
+
+def _unwrap(text: str) -> str:
+    return re.sub(r"\s*\n\s*", " ", text)
 
 
 def _claim_text(text: str, sections: dict[str, str]) -> str:

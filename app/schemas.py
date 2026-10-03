@@ -1,26 +1,23 @@
 from pydantic import BaseModel, Field
 
 
-class Job(BaseModel):
+class Fund(BaseModel):
     id: str
-    title: str
-    company: str
-    location: str
-    seniority: str
-    min_years: float = 0
-    max_years: float | None = None
-    required_skills: list[str]
-    preferred_skills: list[str]
+    name: str
+    ticker: str
+    sector: str
+    risk: str
+    focus_skills: list[str]
+    related_skills: list[str]
     description: str
 
 
 class Recommendation(BaseModel):
-    job: Job
+    fund: Fund
     score: float = Field(description="Weighted match score from 0 to 1")
-    required_coverage: float
-    preferred_coverage: float
+    focus_coverage: float
+    related_coverage: float
     text_similarity: float
-    experience_fit: float
     matched_skills: list[str]
     missing_skills: list[str]
 
@@ -28,7 +25,7 @@ class Recommendation(BaseModel):
 class RecommendationResponse(BaseModel):
     extracted_skills: list[str]
     resume_years: float | None = Field(
-        description="Years of experience read from the resume. Null when none could be read."
+        description="Years of work read from the resume. Null when none could be read. Not used to pick a fund."
     )
     recommendations: list[Recommendation]
 

@@ -18,6 +18,8 @@ airflow
 excel
 tableau
 power bi
+healthcare
+nlp
 machine learning
 pytorch
 kubernetes
